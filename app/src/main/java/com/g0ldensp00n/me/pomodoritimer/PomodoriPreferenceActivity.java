@@ -1,19 +1,25 @@
 package com.g0ldensp00n.me.pomodoritimer;
 
+import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class PomodoriPreferenceActivity extends PreferenceActivity {
 
@@ -43,11 +49,12 @@ public class PomodoriPreferenceActivity extends PreferenceActivity {
         switch(sharedPreferences.getString(getString(R.string.themePreferences), "Default")) {
             case "Dark":
                 //Set Settings Dark Theme
-                setCurrentTheme(R.color.colorDark, R.color.colorDarkLight, R.color.colorDarkRing, R.color.textColorPrimary);
+                setCurrentTheme(R.color.settingDarkThemeMain, R.color.settingDarkThemeDark, R.color.settingDarkThemeBackground, R.color.settingDarkThemeFont);
                 break;
             default:
                 //Set Settings Light Theme
                 setCurrentTheme(R.color.settingLightThemeMain, R.color.settingLightThemeDark, R.color.settingLightThemeBackground, R.color.settingLightThemeFont);
+                break;
         }
     }
 
@@ -59,14 +66,13 @@ public class PomodoriPreferenceActivity extends PreferenceActivity {
                 }
             };
 
-    private void setCurrentTheme(int colorPrimary, int colorDark, int colorBackground, int textColor){
+    private void setCurrentTheme(int colorPrimary, int colorDark, int colorBackground, int fontColor){
         bar.getNavigationIcon().setTint(getColorInt(R.color.textColorPrimary));
         bar.setBackgroundColor(getColorInt(colorPrimary));
         bar.setTitleTextColor(getColorInt(R.color.textColorPrimary));
         getWindow().setStatusBarColor(getColorInt(colorDark));
         getWindow().setNavigationBarColor(getColorInt(colorPrimary));
         getWindow().setBackgroundDrawable(new ColorDrawable(getColorInt(colorBackground)));
-        getView
     }
 
     private int getColorInt(int colorIn){

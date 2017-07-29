@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Main Theme -->
     <style name="Theme.AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name = "android:colorPrimary">@color/colorPrimary</item>
@@ -13,6 +13,7 @@
         <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
+    <!--Customized ActionBar Color-->
     <style name="ActionBarColor" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/colorPrimary</item>
         <item name = "background">@color/colorPrimary</item>

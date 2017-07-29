@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Global Colors-->
+    <color name="textColorPrimary">#fff</color>
+
+    <!--Default Red Theme-->
     <color name="colorPrimary">#f44336</color>
     <color name="colorPrimaryDark">#ba000d</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorRing">#FF7668</color>
-    <color name="textColorPrimary">#fff</color>
 
+    <!--AMOLED Theme-->
+    <color name="colorDark">#000000</color>
+    <color name="colorDarkLight">#232323</color>
+    <color name="colorDarkRing">#717171</color>
+
+    <!--Break Theme-->
     <color name="colorBreak">#3949ab</color>
     <color name="colorBreakDark">#00227b</color>
     <color name="colorBreakAccent">#0077c2</color>
     <color name="colorBreakRing">#646EAA</color>
 
-    <color name="colorDark">#000000</color>
-    <color name="colorDarkLight">#232323</color>
-    <color name="colorDarkRing">#717171</color>
-
     <!-- Settings Themes-->
         <!--Light Theme-->
         <color name="settingLightThemeMain">#607D8B</color>
         <color name="settingLightThemeDark">#263238</color>
-        <color name="settingLightThemeBackground">#ECEFF1</color>
+        <color name="settingLightThemeBackground">#cfcfcf</color>
         <color name="settingLightThemeFont">#111</color>
+        <!--Dark Theme-->
+        <color name="settingDarkThemeMain">#616161</color>
+        <color name="settingDarkThemeDark">#373737</color>
+        <color name="settingDarkThemeBackground">#8e8e8e</color>
+        <color name="settingDarkThemeFont">#fff</color>
 </resources>
