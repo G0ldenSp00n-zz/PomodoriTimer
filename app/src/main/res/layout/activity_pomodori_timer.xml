@@ -2,12 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.g0ldensp00n.me.pomodoritimer.PomodoriTimer"
     android:background="@color/colorPrimary"
-    tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:context="com.g0ldensp00n.me.pomodoritimer.PomodoriTimer"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
         android:id="@+id/textView2"
@@ -22,12 +23,12 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="354dp"
         android:layout_height="436dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="4dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/clockring"
         android:max="10000"
@@ -35,40 +36,39 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="8dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/timerText"
         android:layout_width="157dp"
         android:layout_height="61dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="184dp"
         android:lineSpacingExtra="8sp"
         android:text="@string/currentTimeLeft"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="@dimen/timeSize"
         app:layout_constraintEnd_toEndOf="@+id/progressBar"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="@+id/progressBar"
-        android:layout_marginStart="8dp"
         app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintTop_toTopOf="@+id/progressBar"
-        android:layout_marginTop="184dp" />
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintTop_toTopOf="@+id/progressBar" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="40dp"
         android:clickable="true"
         android:onClick="pauseTimer"
         app:backgroundTint="@android:color/background_light"
-        app:rippleColor="@android:color/darker_gray"
-        app:srcCompat="@drawable/ic_stop_primarycolor"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="100dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@android:color/darker_gray"
+        app:srcCompat="@drawable/ic_stop_primarycolor" />
 
 </android.support.constraint.ConstraintLayout>
