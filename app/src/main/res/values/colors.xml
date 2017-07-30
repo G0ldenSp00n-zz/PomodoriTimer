@@ -9,6 +9,21 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorRing">#FF7668</color>
 
+    <!--Material Light Theme-->
+    <color name="colorLightMaterial">#607D8B</color>
+    <color name="colorLightMaterialDark">#263238</color>
+    <color name="colorLightMaterialRing">#b6b6b6</color>
+
+    <!--Material Dark Theme-->
+    <color name="colorDarkMaterial">#606060</color>
+    <color name="colorDarkMaterialDark">#363636</color>
+    <color name="colorDarkMaterialRing">#8d8d8d</color>
+
+    <!--Material Green Theme-->
+    <color name="colorGreenMaterial">#689f38</color>
+    <color name="colorGreenMaterialDark">#387002</color>
+    <color name="colorGreenMaterialRing">#99d066</color>
+
     <!--AMOLED Theme-->
     <color name="colorDark">#000000</color>
     <color name="colorDarkLight">#232323</color>
@@ -24,7 +39,7 @@
         <!--Light Theme-->
         <color name="settingLightThemeMain">#607D8B</color>
         <color name="settingLightThemeDark">#263238</color>
-        <color name="settingLightThemeBackground">#cfcfcf</color>
+        <color name="settingLightThemeBackground">#b6b6b6</color>
         <color name="settingLightThemeFont">#111</color>
         <!--Dark Theme-->
         <color name="settingDarkThemeMain">#616161</color>

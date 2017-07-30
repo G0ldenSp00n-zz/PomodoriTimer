@@ -27,66 +27,94 @@ public class PomodoriTimer extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Creates Initial View and Loads it to the Screen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pomodori_timer);
 
-        getSupportActionBar().setElevation(0);
-        Typeface sfFont = Typeface.createFromAsset(getAssets(), "fonts/sf_font.ttf");
-        timerOutput = (TextView) findViewById(R.id.timerText);
-        timerOutput.setTypeface(sfFont);
+        //Setup Theme and UI
         setSelectedTheme();
-        startRepeatingTask();
 
-        SharedPreferences settingManager = PreferenceManager.getDefaultSharedPreferences(this);
-        settingManager.registerOnSharedPreferenceChangeListener(spChanged);
+        //Start the Timer
+        startRepeatingTask();
     }
 
     private void setSelectedTheme() {
+        //Setting the ActionBar to be parallel to the background
+        getSupportActionBar().setElevation(0);
+
+        //Set the Font of the Timer
+        Typeface sfFont = Typeface.createFromAsset(getAssets(), "fonts/sf_font.ttf");
+        timerOutput = (TextView) findViewById(R.id.timerText);
+        timerOutput.setTypeface(sfFont);
+
+        //Setup Theme from Preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         switch(sharedPreferences.getString(getString(R.string.themePreferences), "Default")) {
-            case "Dark":
+            case "AMOLED Dark":
                 setCurrentTheme(R.color.colorDark, R.color.colorDarkLight, R.color.colorDarkRing);
+                break;
+            case "Light":
+                setCurrentTheme(R.color.colorLightMaterial, R.color.colorLightMaterialDark, R.color.colorLightMaterialRing);
+                break;
+            case "Green":
+                setCurrentTheme(R.color.colorGreenMaterial, R.color.colorGreenMaterialDark, R.color.colorGreenMaterialRing);
+                break;
+            case "Dark":
+                setCurrentTheme(R.color.colorDarkMaterial, R.color.colorDarkMaterialDark, R.color.colorDarkMaterialRing);
                 break;
             default:
                 setCurrentTheme(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorRing);
+                break;
         }
+
+        //Setup Preference Manager the Handle Theme Change
+        SharedPreferences settingManager = PreferenceManager.getDefaultSharedPreferences(this);
+        settingManager.registerOnSharedPreferenceChangeListener(spChanged);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //Add the Menu to the ActionBar
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //Test for Clicks in Menu
         switch (item.getItemId()) {
             case R.id.settingsMenuItem:
+                //If Clicked Settings Load Settings
                 openSettingsView();
                 return true;
             default:
+                //If Not Found Do Nothing
                 return false;
         }
     }
 
     private void openSettingsView() {
+        //Make a New Intent to Load Settings Menu and Load It as the Current Activity
         Intent settingsIntent = new Intent(this, PomodoriPreferenceActivity.class);
         startActivity(settingsIntent);
     }
 
     @Override
     public void onDestroy(){
+        //When App Closed Kill Processes
         super.onDestroy();
         stopRepeatingTask();
     }
 
     void startRepeatingTask(){
+        //Start the Timer
         timerUpdate.run();
         progressBarUpdate.run();
     }
 
     void stopRepeatingTask(){
+        //Stop the Timer
         handler.removeCallbacks(progressBarUpdate);
         handler.removeCallbacks(timerUpdate);
     }
@@ -126,7 +154,7 @@ public class PomodoriTimer extends AppCompatActivity {
         Drawable stop = getDrawable(R.drawable.ic_stop_primarycolor);
         stop.setTint(getColorInt(colorPrimary));
         ((FloatingActionButton) findViewById(R.id.floatingActionButton)).setImageDrawable(stop);
-        Drawable clockRing = getDrawable(R.drawable.clockring);
+        Drawable clockRing = getDrawable(R.drawable.clockring);;
         clockRing.setTint(getColorInt(colorRing));
         findViewById(R.id.progressBar).setBackground(clockRing);
     }

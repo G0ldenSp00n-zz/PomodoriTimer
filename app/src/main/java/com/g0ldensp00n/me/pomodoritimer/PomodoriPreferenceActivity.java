@@ -46,15 +46,13 @@ public class PomodoriPreferenceActivity extends PreferenceActivity {
 
     private void setSelectedTheme() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        switch(sharedPreferences.getString(getString(R.string.themePreferences), "Default")) {
-            case "Dark":
-                //Set Settings Dark Theme
-                setCurrentTheme(R.color.settingDarkThemeMain, R.color.settingDarkThemeDark, R.color.settingDarkThemeBackground, R.color.settingDarkThemeFont);
-                break;
-            default:
-                //Set Settings Light Theme
-                setCurrentTheme(R.color.settingLightThemeMain, R.color.settingLightThemeDark, R.color.settingLightThemeBackground, R.color.settingLightThemeFont);
-                break;
+        String toTest =sharedPreferences.getString("themePreferences", "Default");
+        if(toTest.equals("Dark") || toTest.equals("AMOLED Dark") || toTest.equals("Green")){
+            //Set Settings Dark Theme
+            setCurrentTheme(R.color.settingDarkThemeMain, R.color.settingDarkThemeDark, R.color.settingDarkThemeBackground, R.color.settingDarkThemeFont);
+        } else {
+            //Set Settings Light Theme
+            setCurrentTheme(R.color.settingLightThemeMain, R.color.settingLightThemeDark, R.color.settingLightThemeBackground, R.color.settingLightThemeFont);
         }
     }
 

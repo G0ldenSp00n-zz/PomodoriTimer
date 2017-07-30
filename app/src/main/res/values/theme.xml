@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="theme"><item>@string/defaultValue</item><item>Dark</item><item>Dark 2 Electric Bogaloo</item></string-array>
+    <string-array name="theme"><item>@string/defaultValue</item><item>Light</item><item>Green</item><item>Dark</item><item>AMOLED Dark</item></string-array>
 </resources>
