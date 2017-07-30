@@ -74,6 +74,7 @@ public class PomodoriPreferenceActivity extends PreferenceActivity {
     }
 
     private int getColorInt(int colorIn){
+        //Manages the Color to Support Older SDKs
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             return getColor(colorIn);
         } else {
