@@ -127,9 +127,8 @@ public class PomodoriTimer extends AppCompatActivity {
                     if(runningTimer) {
                         String[] timerStrings = timerOutput.getText().toString().split(":");
                         if (Integer.parseInt(timerStrings[1]) == 0 && Integer.parseInt(timerStrings[0]) == 0) {
-                            String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
                             //Sets 25 minutes when not on break, and 5 minutes for the break
-                            String output = breakTime ? "25:00" : "5:00";
+                            String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
                             //Set the Timer to the new time
                             timerOutput.setText(output);
                             breakTime = !breakTime;
