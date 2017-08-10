@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PomodoriTimer.iml" filepath="$PROJECT_DIR$/PomodoriTimer.iml" />
-      <module fileurl="file://C:\Users\Spoon\StudioProjects\PomodoriTimer\PomodoriTimer.iml" filepath="C:\Users\Spoon\StudioProjects\PomodoriTimer\PomodoriTimer.iml" />
       <module fileurl="file://C:\Users\hayfi\AndroidStudioProjects\PomodoriTimer\.idea\PomodoriTimer.iml" filepath="C:\Users\hayfi\AndroidStudioProjects\PomodoriTimer\.idea\PomodoriTimer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

@@ -24,6 +24,7 @@ public class PomodoriTimer extends AppCompatActivity {
     private TextView timerOutput;
     private boolean runningTimer = true;
     private boolean breakTime = false;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class PomodoriTimer extends AppCompatActivity {
         timerOutput.setTypeface(sfFont);
 
         //Setup Theme from Preferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         switch(sharedPreferences.getString(getString(R.string.themePreferences), "Default")) {
             case "AMOLED Dark":
                 setCurrentTheme(R.color.colorDark, R.color.colorDarkLight, R.color.colorDarkRing);
@@ -68,8 +69,7 @@ public class PomodoriTimer extends AppCompatActivity {
         }
 
         //Setup Preference Manager the Handle Theme Change
-        SharedPreferences settingManager = PreferenceManager.getDefaultSharedPreferences(this);
-        settingManager.registerOnSharedPreferenceChangeListener(spChanged);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(spChanged);
     }
 
 
@@ -127,7 +127,7 @@ public class PomodoriTimer extends AppCompatActivity {
                     if(runningTimer) {
                         String[] timerStrings = timerOutput.getText().toString().split(":");
                         if (Integer.parseInt(timerStrings[1]) == 0 && Integer.parseInt(timerStrings[0]) == 0) {
-                            String output = breakTime ? "25:00" : "5:00";
+                            String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
                             timerOutput.setText(output);
                             breakTime = !breakTime;
                             if(breakTime) setCurrentTheme(R.color.colorBreak, R.color.colorBreakDark, R.color.colorBreakRing);
@@ -171,7 +171,7 @@ public class PomodoriTimer extends AppCompatActivity {
                         int timeCurrent = ((Integer.parseInt(timerStrings[0]) * 60) + Integer.parseInt(timerStrings[1]));
                         currentRemove = timeLast != timeCurrent ? 0 : currentRemove;
                         double currentTimerTime = timeCurrent - (currentRemove * 0.01);
-                        double currentMax = breakTime ? 300.0 : 1500;
+                        double currentMax = breakTime ? Integer.parseInt(sharedPreferences.getString("breakTimeLength", "5")) * 60 : Integer.parseInt(sharedPreferences.getString("workTimeLength", "25")) * 60;
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             progressBar.setProgress(Math.abs((breakTime ? -10000 : 0) + (int) ((currentTimerTime / currentMax) * 10000.0)), true);
@@ -191,7 +191,14 @@ public class PomodoriTimer extends AppCompatActivity {
             SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                    if(!breakTime) setSelectedTheme();
+                    if(!breakTime){
+                        //Refresh Theme
+                        setSelectedTheme();
+
+                        //Reset Timer
+                        String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
+                        timerOutput.setText(output);
+                    }
                 }
             };
 
