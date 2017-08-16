@@ -7,4 +7,18 @@
         android:entryValues="@array/theme"
         android:key="@string/themePreferences"
         android:title="Theme" />
+    <EditTextPreference
+        android:defaultValue="25"
+        android:inputType="number"
+        android:key="workTimeLength"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Work Length (Minutes)" />
+    <EditTextPreference
+        android:defaultValue="5"
+        android:inputType="number"
+        android:key="breakTimeLength"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Break Length (Minutes)" />
 </PreferenceScreen>

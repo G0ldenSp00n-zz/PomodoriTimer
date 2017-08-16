@@ -24,6 +24,7 @@ public class PomodoriTimer extends AppCompatActivity {
     private TextView timerOutput;
     private boolean runningTimer = true;
     private boolean breakTime = false;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class PomodoriTimer extends AppCompatActivity {
         timerOutput.setTypeface(sfFont);
 
         //Setup Theme from Preferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         switch(sharedPreferences.getString(getString(R.string.themePreferences), "Default")) {
             case "AMOLED Dark":
                 setCurrentTheme(R.color.colorDark, R.color.colorDarkLight, R.color.colorDarkRing);
@@ -68,8 +69,7 @@ public class PomodoriTimer extends AppCompatActivity {
         }
 
         //Setup Preference Manager the Handle Theme Change
-        SharedPreferences settingManager = PreferenceManager.getDefaultSharedPreferences(this);
-        settingManager.registerOnSharedPreferenceChangeListener(spChanged);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(spChanged);
     }
 
 
@@ -124,40 +124,31 @@ public class PomodoriTimer extends AppCompatActivity {
         @Override
         public void run(){
                 try {
-                    //Prevents Timer from Ticking Down on Disable
                     if(runningTimer) {
-                        //Get the Current Timer and Make an Array of Minutes and Seconds
                         String[] timerStrings = timerOutput.getText().toString().split(":");
-                        //Test if the Timer has hit zero
                         if (Integer.parseInt(timerStrings[1]) == 0 && Integer.parseInt(timerStrings[0]) == 0) {
                             //Sets 25 minutes when not on break, and 5 minutes for the break
-                            String output = breakTime ? "25:00" : "5:00";
+                            String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
                             //Set the Timer to the new time
                             timerOutput.setText(output);
-                            //Flip the Current Break Status
                             breakTime = !breakTime;
-                            //Set break theme Else set selected theme
                             if(breakTime) setCurrentTheme(R.color.colorBreak, R.color.colorBreakDark, R.color.colorBreakRing);
                             else setSelectedTheme();
                         } else if (Integer.parseInt(timerStrings[1]) == 0) {
-                            //If Seconds Reaches Zero, Reset and Reduce Minutes
                             String output = Integer.parseInt(timerStrings[0]) - 1 + ":59";
                             timerOutput.setText(output);
                         } else {
-                            //Increment the Timer Down
                             String output = timerStrings[0] + ":" + String.format("%02d", Integer.parseInt(timerStrings[1]) - 1);
                             timerOutput.setText(output);
                         }
                     }
                 } finally {
-                    //Set the Task to Repeat Always
                     handler.postDelayed(this, 1000);
                 }
         }
     };
 
     private void setCurrentTheme(int colorPrimary, int colorDark, int colorRing){
-        //Manages the Aspects of the Theme to Update Programmatically
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColorInt(colorPrimary)));
         getWindow().setStatusBarColor(getColorInt(colorDark));
         getWindow().setNavigationBarColor(getColorInt(colorPrimary));
@@ -176,30 +167,19 @@ public class PomodoriTimer extends AppCompatActivity {
         @Override
         public void run() {
                 try {
-                    //Prevents Timer from Ticking Down on Disable
                     if(runningTimer) {
-                        //Gets the Progress Bar
                         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                        //Gets Current Time in Array of Minutes and Seconds
                         String[] timerStrings = timerOutput.getText().toString().split(":");
-                        //Tunes the Current Time into an Int of Seconds
                         int timeCurrent = ((Integer.parseInt(timerStrings[0]) * 60) + Integer.parseInt(timerStrings[1]));
-                        //Tests if currentTime has ticked down a second
                         currentRemove = timeLast != timeCurrent ? 0 : currentRemove;
-                        //Sets the Timer to update with current 100ms
                         double currentTimerTime = timeCurrent - (currentRemove * 0.01);
-                        //Sets the Maximum Seconds Depending on the breakTime Status
-                        double currentMax = breakTime ? 300.0 : 1500;
-                        //Uses the Max Time and Current Time to get Current Progress Bar Int
-                        int progressBarAmount = Math.abs((breakTime ? -10000 : 0) + (int) ((currentTimerTime / currentMax) * 10000.0));
+                        double currentMax = breakTime ? Integer.parseInt(sharedPreferences.getString("breakTimeLength", "5")) * 60 : Integer.parseInt(sharedPreferences.getString("workTimeLength", "25")) * 60;
 
-                        //Adds Animation to Progress Bar Move if Supported By SDK Version
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            progressBar.setProgress(progressBarAmount, true);
+                            progressBar.setProgress(Math.abs((breakTime ? -10000 : 0) + (int) ((currentTimerTime / currentMax) * 10000.0)), true);
                         }else {
-                            progressBar.setProgress(progressBarAmount);
+                            progressBar.setProgress(Math.abs((breakTime ? -10000 : 0) + (int) ((currentTimerTime / currentMax) * 10000.0)));
                         }
-                        //Updates Last Time and currentRemove
                         timeLast = timeCurrent;
                         currentRemove++;
                     }
@@ -211,15 +191,20 @@ public class PomodoriTimer extends AppCompatActivity {
 
     SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
             SharedPreferences.OnSharedPreferenceChangeListener() {
-            //Test if the Preferences Change, then update theme
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                    if(!breakTime) setSelectedTheme();
+                    if(!breakTime){
+                        //Refresh Theme
+                        setSelectedTheme();
+
+                        //Reset Timer
+                        String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
+                        timerOutput.setText(output);
+                    }
                 }
             };
 
     public void pauseTimer(View view) {
-        //Toggles the Timer when the Button is Pressed
         if(runningTimer){
             stopRepeatingTask();
             runningTimer = !runningTimer;
@@ -228,7 +213,6 @@ public class PomodoriTimer extends AppCompatActivity {
             runningTimer = !runningTimer;
         }
 
-        //Updates the Pause Play Action Button Depending on Current State
         if(view instanceof FloatingActionButton){
             FloatingActionButton button = (FloatingActionButton) view;
             if(runningTimer){
@@ -244,7 +228,6 @@ public class PomodoriTimer extends AppCompatActivity {
     }
 
     private int getColorInt(int colorIn){
-        //Manages the Color to Support Older SDKs
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             return getColor(colorIn);
         } else {
