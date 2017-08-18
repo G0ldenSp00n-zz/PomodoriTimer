@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,8 +23,10 @@ public class PomodoriTimer extends AppCompatActivity {
 
     private Handler handler = new Handler();
     private TextView timerOutput;
-    private boolean runningTimer = true;
+    private boolean runningTimer = false;
     private boolean breakTime = false;
+    private int currentBreakMax = 5 * 60;
+    private int currentWorkMax = 25 * 60;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -34,9 +37,6 @@ public class PomodoriTimer extends AppCompatActivity {
 
         //Setup Theme and UI
         setSelectedTheme();
-
-        //Start the Timer
-        startRepeatingTask();
     }
 
     private void setSelectedTheme() {
@@ -47,6 +47,10 @@ public class PomodoriTimer extends AppCompatActivity {
         Typeface sfFont = Typeface.createFromAsset(getAssets(), "fonts/sf_font.ttf");
         timerOutput = (TextView) findViewById(R.id.timerText);
         timerOutput.setTypeface(sfFont);
+
+        registerPressListeners();
+        ProgressBar progressBar = (ProgressBar) (findViewById(R.id.progressBar));
+        progressBar.setProgress(100000);
 
         //Setup Theme from Preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -129,6 +133,8 @@ public class PomodoriTimer extends AppCompatActivity {
                         if (Integer.parseInt(timerStrings[1]) == 0 && Integer.parseInt(timerStrings[0]) == 0) {
                             //Sets 25 minutes when not on break, and 5 minutes for the break
                             String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
+                            currentBreakMax = Integer.parseInt(sharedPreferences.getString("breakTimeLength", "5"));
+                            currentWorkMax = Integer.parseInt(sharedPreferences.getString("workTimeLengh", "25"));
                             //Set the Timer to the new time
                             timerOutput.setText(output);
                             breakTime = !breakTime;
@@ -153,9 +159,9 @@ public class PomodoriTimer extends AppCompatActivity {
         getWindow().setStatusBarColor(getColorInt(colorDark));
         getWindow().setNavigationBarColor(getColorInt(colorPrimary));
         findViewById(R.id.mainBackground).setBackgroundColor(getColorInt(colorPrimary));
-        Drawable stop = getDrawable(R.drawable.ic_stop_primarycolor);
-        stop.setTint(getColorInt(colorPrimary));
-        ((FloatingActionButton) findViewById(R.id.floatingActionButton)).setImageDrawable(stop);
+        Drawable floatButton = runningTimer ? getDrawable(R.drawable.ic_stop_primarycolor) : getDrawable(R.drawable.ic_play_primarycolor);
+        floatButton.setTint(getColorInt(colorPrimary));
+        ((FloatingActionButton) findViewById(R.id.floatingActionButton)).setImageDrawable(floatButton);
         Drawable clockRing = getDrawable(R.drawable.clockring);;
         clockRing.setTint(getColorInt(colorRing));
         findViewById(R.id.progressBar).setBackground(clockRing);
@@ -173,7 +179,7 @@ public class PomodoriTimer extends AppCompatActivity {
                         int timeCurrent = ((Integer.parseInt(timerStrings[0]) * 60) + Integer.parseInt(timerStrings[1]));
                         currentRemove = timeLast != timeCurrent ? 0 : currentRemove;
                         double currentTimerTime = timeCurrent - (currentRemove * 0.01);
-                        double currentMax = breakTime ? Integer.parseInt(sharedPreferences.getString("breakTimeLength", "5")) * 60 : Integer.parseInt(sharedPreferences.getString("workTimeLength", "25")) * 60;
+                        double currentMax = breakTime ? currentBreakMax : currentWorkMax;
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             progressBar.setProgress(Math.abs((breakTime ? -10000 : 0) + (int) ((currentTimerTime / currentMax) * 10000.0)), true);
@@ -198,13 +204,31 @@ public class PomodoriTimer extends AppCompatActivity {
                         setSelectedTheme();
 
                         //Reset Timer
-                        String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
-                        timerOutput.setText(output);
+                        currentBreakMax = Integer.parseInt(sharedPreferences.getString("breakTimeLength", "5")) * 60;
+                        currentWorkMax = Integer.parseInt(sharedPreferences.getString("workTimeLength", "25")) * 60;
                     }
                 }
             };
 
-    public void pauseTimer(View view) {
+    private void registerPressListeners(){
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                resetTimer(view);
+                return true;
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pauseTimer(view);
+            }
+        });
+    }
+
+    private void pauseTimer(View view){
         if(runningTimer){
             stopRepeatingTask();
             runningTimer = !runningTimer;
@@ -225,6 +249,23 @@ public class PomodoriTimer extends AppCompatActivity {
                 button.setImageDrawable(drawableToTint);
             }
         }
+    }
+
+    private void resetTimer(View view) {
+        runningTimer = false;
+        breakTime = false;
+        stopRepeatingTask();
+
+        Drawable drawableToTint = getDrawable(R.drawable.ic_play_primarycolor);
+        drawableToTint.setTint(((ColorDrawable) findViewById(R.id.mainBackground).getBackground()).getColor());
+        ((FloatingActionButton)findViewById(R.id.floatingActionButton)).setImageDrawable(drawableToTint);
+        setSelectedTheme();
+
+        String output = Integer.parseInt(sharedPreferences.getString("workTimeLength", "25")) + ":00";
+        timerOutput.setText(output);
+
+        ProgressBar progressBar = (ProgressBar) (findViewById(R.id.progressBar));
+        progressBar.setProgress(100000);
     }
 
     private int getColorInt(int colorIn){
