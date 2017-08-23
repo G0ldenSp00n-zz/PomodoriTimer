@@ -7,8 +7,8 @@ android {
         applicationId "com.g0ldensp00n.me.pomodoritimer"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 14
-        versionName "1.4.1"
+        versionCode 15
+        versionName "1.4.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

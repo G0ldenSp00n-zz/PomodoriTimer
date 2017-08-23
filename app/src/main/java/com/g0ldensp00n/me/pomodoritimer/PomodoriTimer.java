@@ -132,19 +132,19 @@ public class PomodoriTimer extends AppCompatActivity {
                         String[] timerStrings = timerOutput.getText().toString().split(":");
                         if (Integer.parseInt(timerStrings[1]) == 0 && Integer.parseInt(timerStrings[0]) == 0) {
                             //Sets 25 minutes when not on break, and 5 minutes for the break
-                            String output = breakTime ?  sharedPreferences.getString("workTimeLength", "25")+":00" :  sharedPreferences.getString("breakTimeLength", "5") + ":00";
+                            String output = breakTime ?  String.valueOf(sharedPreferences.getString("workTimeLength", "25"))+":00" :  String.valueOf(sharedPreferences.getString("breakTimeLength", "5")) + ":00";
                             currentBreakMax = Integer.parseInt(sharedPreferences.getString("breakTimeLength", "5"));
-                            currentWorkMax = Integer.parseInt(sharedPreferences.getString("workTimeLengh", "25"));
+                            currentWorkMax = Integer.parseInt(sharedPreferences.getString("workTimeLength", "25"));
                             //Set the Timer to the new time
                             timerOutput.setText(output);
                             breakTime = !breakTime;
                             if(breakTime) setCurrentTheme(R.color.colorBreak, R.color.colorBreakDark, R.color.colorBreakRing);
                             else setSelectedTheme();
                         } else if (Integer.parseInt(timerStrings[1]) == 0) {
-                            String output = Integer.parseInt(timerStrings[0]) - 1 + ":59";
+                            String output = String.valueOf(Integer.parseInt(timerStrings[0]) - 1) + ":59";
                             timerOutput.setText(output);
                         } else {
-                            String output = timerStrings[0] + ":" + String.format("%02d", Integer.parseInt(timerStrings[1]) - 1);
+                            String output = String.format("%s:%s", String.valueOf(timerStrings[0]), String.valueOf(Integer.parseInt(timerStrings[1]) - 1));
                             timerOutput.setText(output);
                         }
                     }
@@ -261,7 +261,7 @@ public class PomodoriTimer extends AppCompatActivity {
         ((FloatingActionButton)findViewById(R.id.floatingActionButton)).setImageDrawable(drawableToTint);
         setSelectedTheme();
 
-        String output = Integer.parseInt(sharedPreferences.getString("workTimeLength", "25")) + ":00";
+        String output = sharedPreferences.getString("workTimeLength", "25") + ":00";
         timerOutput.setText(output);
 
         ProgressBar progressBar = (ProgressBar) (findViewById(R.id.progressBar));
