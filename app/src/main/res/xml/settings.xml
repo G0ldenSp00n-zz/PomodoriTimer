@@ -6,7 +6,7 @@
         android:entries="@array/theme"
         android:entryValues="@array/theme"
         android:key="@string/themePreferences"
-        android:title="Theme" />
+        android:title="@string/listPreferenceTheme" />
     <EditTextPreference
         android:defaultValue="25"
         android:inputType="number"
@@ -14,7 +14,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:textColor="@color/colorDark"
-        android:title="Work Length (Minutes)" />
+        android:title="@string/textPrefrenceWork" />
     <EditTextPreference
         android:defaultValue="5"
         android:inputType="number"
@@ -22,5 +22,5 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:textColor="@color/colorDark"
-        android:title="Break Length (Minutes)" />
+        android:title="@string/textPrefrenceBreak" />
 </PreferenceScreen>
