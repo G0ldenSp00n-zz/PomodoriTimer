@@ -7,20 +7,22 @@
         android:entryValues="@array/theme"
         android:key="@string/themePreferences"
         android:title="@string/listPreferenceTheme" />
-    <EditTextPreference
-        android:defaultValue="25"
-        android:inputType="number"
-        android:key="workTimeLength"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:textColor="@color/colorDark"
-        android:title="@string/textPrefrenceWork" />
-    <EditTextPreference
-        android:defaultValue="5"
-        android:inputType="number"
-        android:key="breakTimeLength"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:textColor="@color/colorDark"
-        android:title="@string/textPrefrenceBreak" />
+    <PreferenceCategory android:title="@string/timerLengthSettings">
+        <EditTextPreference
+            android:defaultValue="25"
+            android:inputType="number"
+            android:key="workTimeLength"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@color/colorDark"
+            android:title="@string/textPrefrenceWork" />
+        <EditTextPreference
+            android:defaultValue="5"
+            android:inputType="number"
+            android:key="breakTimeLength"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@color/colorDark"
+            android:title="@string/textPrefrenceBreak" />
+    </PreferenceCategory>
 </PreferenceScreen>

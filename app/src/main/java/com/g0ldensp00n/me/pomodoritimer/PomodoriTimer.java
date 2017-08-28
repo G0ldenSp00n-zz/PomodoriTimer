@@ -35,6 +35,9 @@ public class PomodoriTimer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pomodori_timer);
 
+        //Setup Preference Manager the Handle Changes in Preferences
+        sharedPreferences.registerOnSharedPreferenceChangeListener(spChanged);
+
         //Setup Theme and UI
         setSelectedTheme();
     }
@@ -42,19 +45,17 @@ public class PomodoriTimer extends AppCompatActivity {
     private void setSelectedTheme() {
         //Setting the ActionBar to be parallel to the background
         getSupportActionBar().setElevation(0);
-
-        //Set the Font of the Timer
-        Typeface sfFont = Typeface.createFromAsset(getAssets(), "fonts/sf_font.ttf");
-        timerOutput = (TextView) findViewById(R.id.timerText);
-        timerOutput.setTypeface(sfFont);
-
+        setTimerFont();
         registerPressListeners();
-        ProgressBar progressBar = (ProgressBar) (findViewById(R.id.progressBar));
-        progressBar.setProgress(100000);
+        setupProgressBar();
+        setObjectColorFromPreferences();
+    }
 
+    private void setObjectColorFromPreferences(){
         //Setup Theme from Preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         switch(sharedPreferences.getString(getString(R.string.themePreferences), "Default")) {
+            //Runs through theme options, and sets colours based on current preference
             case "AMOLED Dark":
                 setCurrentTheme(R.color.colorDark, R.color.colorDarkLight, R.color.colorDarkRing);
                 break;
@@ -68,20 +69,31 @@ public class PomodoriTimer extends AppCompatActivity {
                 setCurrentTheme(R.color.colorDarkMaterial, R.color.colorDarkMaterialDark, R.color.colorDarkMaterialRing);
                 break;
             default:
+                //Set to Default Colours if unknown
                 setCurrentTheme(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorRing);
                 break;
         }
+    }
 
-        //Setup Preference Manager the Handle Theme Change
-        sharedPreferences.registerOnSharedPreferenceChangeListener(spChanged);
+    private void setTimerFont(){
+        //Set the Font of the Timer
+        Typeface sfFont = Typeface.createFromAsset(getAssets(), "fonts/sf_font.ttf");  //Get Font from res/fonts/sf_font.ttf
+        timerOutput = (TextView) findViewById(R.id.timerText);  //Gets Timer Display from View
+        timerOutput.setTypeface(sfFont);  //Sets Timer Displays Font to Selected One
+    }
+
+    private void setupProgressBar(){
+        //Get the Progress Bar and set initial value to max
+        ProgressBar progressBar = (ProgressBar) (findViewById(R.id.progressBar));
+        progressBar.setProgress(100000);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //Add the Menu to the ActionBar
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.menu, menu);  //Gets Menu Items; Adds them the ActionBar
+        return true;  //Returns if successful
     }
 
     @Override
@@ -89,7 +101,7 @@ public class PomodoriTimer extends AppCompatActivity {
         //Test for Clicks in Menu
         switch (item.getItemId()) {
             case R.id.settingsMenuItem:
-                //If Clicked Settings Load Settings
+                //Test User Action if Clicked Open Settings View
                 openSettingsView();
                 return true;
             default:
@@ -99,9 +111,8 @@ public class PomodoriTimer extends AppCompatActivity {
     }
 
     private void openSettingsView() {
-        //Make a New Intent to Load Settings Menu and Load It as the Current Activity
-        Intent settingsIntent = new Intent(this, PomodoriPreferenceActivity.class);
-        startActivity(settingsIntent);
+        Intent settingsIntent = new Intent(this, PomodoriPreferenceActivity.class);  //Makes new intent to open settings menu
+        startActivity(settingsIntent); //Starts the intent, and opens settings menu
     }
 
     @Override
@@ -112,14 +123,16 @@ public class PomodoriTimer extends AppCompatActivity {
     }
 
     void startRepeatingTask(){
-        //Start the Timer
+        //Starts the Timer
         timerUpdate.run();
+        //Starts the ProgressBar
         progressBarUpdate.run();
     }
 
     void stopRepeatingTask(){
-        //Stop the Timer
+        //Stops the Timer
         handler.removeCallbacks(progressBarUpdate);
+        //Stops the ProgressBar
         handler.removeCallbacks(timerUpdate);
     }
 
