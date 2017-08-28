@@ -145,7 +145,7 @@ public class PomodoriTimer extends AppCompatActivity {
                         String[] timerStrings = timerOutput.getText().toString().split(":");
                         if (Integer.parseInt(timerStrings[1]) == 0 && Integer.parseInt(timerStrings[0]) == 0) {
                             //Sets 25 minutes when not on break, and 5 minutes for the break
-                            String output = breakTime ?  String.valueOf(sharedPreferences.getString("workTimeLength", "25"))+":00" :  String.valueOf(sharedPreferences.getString("breakTimeLength", "5")) + ":00";
+                            String output = String.valueOf(breakTime ?  String.valueOf(sharedPreferences.getString("workTimeLength", "25"))+":00" :  String.valueOf(sharedPreferences.getString("breakTimeLength", "5")) + ":00");
                             currentBreakMax = Integer.parseInt(sharedPreferences.getString("breakTimeLength", "5"));
                             currentWorkMax = Integer.parseInt(sharedPreferences.getString("workTimeLength", "25"));
                             //Set the Timer to the new time
@@ -274,7 +274,7 @@ public class PomodoriTimer extends AppCompatActivity {
         ((FloatingActionButton)findViewById(R.id.floatingActionButton)).setImageDrawable(drawableToTint);
         setSelectedTheme();
 
-        String output = sharedPreferences.getString("workTimeLength", "25") + ":00";
+        String output = String.valueOf(sharedPreferences.getString("workTimeLength", "25") + ":00");
         timerOutput.setText(output);
 
         ProgressBar progressBar = (ProgressBar) (findViewById(R.id.progressBar));
